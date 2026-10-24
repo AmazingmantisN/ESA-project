@@ -1,0 +1,387 @@
+{
+  "protocol_version": "1.4",
+  "date": "2026-10-23",
+  "dev_glob": "data/streams/dev_*.csv",
+  "forbidden_in_tuning": [
+    "test_",
+    "expl_"
+  ],
+  "scoring": {
+    "warmup_s": 30,
+    "error": "false% + missed%  (smoothed count > / < true humans), each dev stream weighted equally (26 streams: 10 original + 16 robustness)",
+    "tie_break": [
+      "within 0.10 pt of the best total error: lower worst-single-stream error",
+      "then lower trial index"
+    ],
+    "edge_rule_fraction": 0.05,
+    "groups": {
+      "orig": "the 10 dev streams of v1.0-v1.2 (comparable with v1.2 numbers for the same parameters)",
+      "rob": "the 16 dev_rob_* streams added in v1.3"
+    }
+  },
+  "budget_trials_per_entry": 300,
+  "rng_seed": 20261019,
+  "shared_choices": {
+    "smooth_s": [
+      0.0,
+      1.3
+    ],
+    "maxmissed_s": [
+      0.5,
+      1.0,
+      2.5
+    ],
+    "dht_offset": [
+      0.0,
+      0.1,
+      0.2
+    ]
+  },
+  "entries": {
+    "ours": {
+      "label": "Ours (extent persistence, robust threshold)",
+      "cli": "ours",
+      "space": {
+        "window_s": {
+          "type": "loguniform",
+          "lo": 0.5,
+          "hi": 12.0,
+          "operational_bounds": [
+            "hi"
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 1.5
+        },
+        "contrast": {
+          "type": "uniform",
+          "lo": 0.3,
+          "hi": 2.5
+        },
+        "k": {
+          "type": "uniform",
+          "lo": 0.0,
+          "hi": 3.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "window_s": 6.0,
+        "drift": 0.4,
+        "contrast": 1.0,
+        "k": 0.5,
+        "smooth_s": 1.3,
+        "maxmissed_s": 2.5,
+        "note": "preview-sweep best, tuned on dev earlier"
+      }
+    },
+    "bpaper": {
+      "label": "B-paper (their main.py / paper rule)",
+      "cli": "bpaper",
+      "space": {
+        "timebase": {
+          "type": "choice",
+          "values": [
+            "frames",
+            "paper",
+            "loop"
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 2.0
+        },
+        "dht_offset": {
+          "type": "choice",
+          "from": "dht_offset"
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "timebase": "frames",
+        "drift": 0.05,
+        "dht_offset": 0.0,
+        "smooth_s": null,
+        "maxmissed_s": null,
+        "note": "as published, untuned (preset values for smoothing and max_missed)"
+      }
+    },
+    "bcode": {
+      "label": "B-code, intended behaviour (their firmware rule, static tracks not counted)",
+      "cli": "bcode",
+      "space": {
+        "npersist": {
+          "type": "choice",
+          "values": [
+            10,
+            20,
+            40,
+            80
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 2.0
+        },
+        "dht_offset": {
+          "type": "choice",
+          "from": "dht_offset"
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "npersist": 20,
+        "drift": 0.08,
+        "dht_offset": 0.0,
+        "smooth_s": null,
+        "maxmissed_s": null,
+        "note": "as published, untuned (preset values for smoothing and max_missed)"
+      }
+    },
+    "bcode_asis": {
+      "label": "B-code, as published (static tracks still counted)",
+      "cli": "bcode_asis",
+      "space": {
+        "npersist": {
+          "type": "choice",
+          "values": [
+            10,
+            20,
+            40,
+            80
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 2.0
+        },
+        "dht_offset": {
+          "type": "choice",
+          "from": "dht_offset"
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "npersist": 20,
+        "drift": 0.08,
+        "dht_offset": 0.0,
+        "smooth_s": null,
+        "maxmissed_s": null,
+        "note": "as published, untuned (preset values for smoothing and max_missed)"
+      }
+    },
+    "ours_v2": {
+      "label": "Ours-v2 (Layer 1: stationary-candidate state with persist grace, hysteresis, candidate policy, global assignment)",
+      "cli": "ours_v2",
+      "space": {
+        "window_s": {
+          "type": "loguniform",
+          "lo": 0.5,
+          "hi": 12.0,
+          "operational_bounds": [
+            "hi"
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 1.5
+        },
+        "contrast": {
+          "type": "uniform",
+          "lo": 0.3,
+          "hi": 2.5
+        },
+        "k": {
+          "type": "uniform",
+          "lo": 0.0,
+          "hi": 3.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        },
+        "persist_s": {
+          "type": "loguniform",
+          "lo": 0.25,
+          "hi": 90.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "hyst_s": {
+          "type": "loguniform",
+          "lo": 0.25,
+          "hi": 8.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "cand_policy": {
+          "type": "choice",
+          "values": [
+            0,
+            2,
+            4
+          ]
+        },
+        "assign_mode": {
+          "type": "choice",
+          "values": [
+            0,
+            1
+          ]
+        }
+      },
+      "fixed": {
+        "cand_min_area": 0,
+        "cand_max_peak": 0,
+        "merge_area": 0,
+        "note": "size/warmth gate (policy bit 1) and merge_area are NOT tuned: dev has no multi-person stream, and the injected heat sources have simulator-set size and amplitude, so tuning a size/warmth gate on dev would fit the simulator (Layer 2, deferred to Step 10 real recordings)"
+      },
+      "reference": {
+        "window_s": 6.0,
+        "drift": 0.4,
+        "contrast": 1.0,
+        "k": 0.5,
+        "smooth_s": 1.3,
+        "maxmissed_s": 2.5,
+        "persist_s": 0.1,
+        "hyst_s": 0.1,
+        "cand_policy": 0,
+        "assign_mode": 0,
+        "note": "nested v1 reference: mode 3 with 1-frame persist/hyst and policy 0 is exactly the Ours-v1 reference (proved by check_v2_nested); not eligible to win"
+      }
+    }
+  },
+  "supersedes": {
+    "version": "1.3",
+    "json_sha256": "5b9e84f057b02de97bd4689330e32eda444452e4b3a8fc3360bae5f2bf23f913",
+    "md_sha256": "8705957aec4a4c2dd8ff41a54494f1bc7adc3c51f82e5a788ac8653acd98d59f",
+    "reason": "The v1.3 edge rule fired on 5 winner parameters: Ours-v1 window_s 12.0 (hi); Ours-v2 window_s 1.60 (lo) and persist_s 27.97 (hi); B-paper drift 0.80 (hi, all top-10 identical); B-code drift 0.73 (near hi). v1.4 widens Ours-v2 persist_s hi 30->90 s, Ours-v1/v2 window_s lo 1.5->0.5 s (both, so the shared knobs stay nested), and B-paper/B-code/B-code-as-published drift hi 0.8->2.0; declares window_s <= 12 s an operational limit. Scoring (26 streams), budget, seeds, tie-break and the other ranges are unchanged. Because log ranges changed, stage-1 samples differ from v1.3 for all entries; the consistency check is instead a re-score of the v1.3 winners (must reproduce their v1.3 dev scores). Made after seeing v1.3 dev AND held-out (seeds 44/55) results: adaptive.",
+    "earlier": {
+      "version": "1.3",
+      "chain": {
+        "version": "1.2",
+        "json_sha256": "5b58cb8defc2e5e906a7cd1eff24a68209b418eb05de05699b74a35e10760aa6",
+        "md_sha256": "280b092c04525b8c8656ba64121cc70a0aeef0a4cbf5759387e0854e301b1d7a",
+        "reason": "v1.2 scored on perfectly steady injected sources only (10 dev streams); the Step 5e stress test showed its Ours-v2 winner is a steady-source specialist. v1.3 adds 16 non-ideal dev streams and nothing else: search spaces, budget, seeds, tie-break, edge rule and the 10 original streams are unchanged, so every stage-1 trial scores identically on the original streams (check_v13_vs_v12.py). Made after seeing the v1.2 DEV results and the seed-77 stress test (adaptive); test_* never touched.",
+        "earlier": {
+          "version": "1.1",
+          "json_sha256_prefix": "239ef348cfb68181",
+          "md_sha256_prefix": "662c87f6619a9ac3",
+          "then": {
+            "version": "1.0",
+            "json_sha256_prefix": "6eede3d68865115c"
+          }
+        }
+      }
+    }
+  },
+  "stage2": {
+    "top_k": 5,
+    "perturbations_per_seed": 60,
+    "continuous_log_sigma": 0.2,
+    "continuous_lin_sigma_frac": 0.08,
+    "discrete_resample_prob": 0.3,
+    "rng_seed_offset": 1,
+    "note": "total 300 + 5x60 = 600 evaluated trials per entry; stage 1 is identical to v1.0 (same seed and sampler)"
+  },
+  "errata": {
+    "k_natural_bound": "v1.1 edge rule flagged k at 0.07 on a 0-3 range. k=0 means the k term is off, so 0 is a natural bound, not an arbitrary cutoff. From v1.2 an edge at a natural bound (marked natural_bounds) is reported as 'natural bound' and does NOT trigger widening. Applies to k (Ours-v1, Ours-v2), persist_s and hyst_s lower ends (~1 frame is the minimum meaningful value). Non-natural edges still trigger widening in a new version."
+  },
+  "results_dir": "tuning_results_v14",
+  "stream_manifest": "data/streams/dev_rob_manifest.json",
+  "robust_dev": {
+    "seed": 20261023,
+    "builder": "python/make_robust_dev.py",
+    "variants": [
+      "jitter_xs",
+      "jitter_s",
+      "drift",
+      "switch"
+    ],
+    "amps_degC": {
+      "w": 3.0,
+      "s": 8.0
+    },
+    "bases": [
+      "dev_empty_clean",
+      "dev_single_clean"
+    ],
+    "reported_only_not_tuned": [
+      "jitter_m",
+      "walker"
+    ],
+    "note": "Made after seeing the Step 5e stress test (seed 77). jitter_m collapses every method (89-97 %) and walker is an adversary; neither carries tuning information, both are reported on the held-out seeds."
+  },
+  "heldout_stress": {
+    "seeds": [
+      101,
+      202
+    ],
+    "script": "python/robust_check.py",
+    "variants": [
+      "steady",
+      "jitter_s",
+      "jitter_m",
+      "drift",
+      "switch",
+      "walker"
+    ],
+    "used_for_tuning": false,
+    "note": "Fresh seeds fixed before the v1.4 sweep. Seeds 44 and 55 judged v1.3 and 77 designed it; seeds 66 and 88 were used once for a smoke test of the runner with the v1.2 and v1.3 winners (their results were seen), so they are burnt too. 101 and 202 have never been run."
+  },
+  "operational_limits": {
+    "window_s_max": 12.0,
+    "note": "Ours-v1 and Ours-v2 window_s <= 12 s (about 45 frames at 3.8 fps; firmware MAX_WINDOW is 64). A new track is not counted until its window fills, so window_s is the detection delay; dev scoring does not measure delay, so the limit is declared here instead of letting the search run into it. Declared after seeing that the v1.3 winner sat at exactly 12 s."
+  },
+  "stop_rule": "v1.4 is the last widening iteration. Any winner still on a non-natural, non-operational range end is reported as 'edge-limited' (a limit of the search, stated in the paper) and does NOT trigger v1.5.",
+  "latency_report": {
+    "script": "python/latency_check.py",
+    "note": "Report only, not part of the score: splice of the last 60 s of dev_empty_clean followed by the first 150 s of dev_single_clean; delay = time from the splice until the smoothed count is >= 1 for 5 s."
+  }
+}

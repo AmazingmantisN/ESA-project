@@ -1,0 +1,141 @@
+{
+  "frozen_at": "2026-10-23T03:31:33+05:30",
+  "protocol_version": "1.4",
+  "protocol_json_sha256": "4d4b84b144950381e1c190e9919846e5f05ac1e9fb3a8efd02feb3cf45735153",
+  "protocol_md_sha256": "a5af0883a0c03c7812a3f01b2bf203e75753ce6852d6dcd2fc20de66cc944f70",
+  "candidates_file_sha256": "5c0f0b892cfcaeae349d1a1a9623a0d360c11bb58855c1862f02296c49a44afb",
+  "decision_note": "Ours-v2 is the protocol-v1.4 winner, chosen by the user on 23 Oct 2026 over the v1.3 winner. The R1 tie-break in the v1.4 protocol (v1.4 not better than v1.3 on the held-out 'all except walker' row, so the earlier winner stays) would have kept the v1.3 winner; the deviation is deliberate and recorded: that row is dominated by jitter_m, where both winners fail and results swing by about 15 points between seed pairs, while the v1.4 winner is better on dev (0.64 vs 1.80), on the tuned-family stress row and on detection delay (4.2 s vs 14.0 s).",
+  "candidates": {
+    "ours": {
+      "label": "Ours (extent persistence, robust threshold)",
+      "params": {
+        "window_s": 12.0,
+        "drift": 0.6484,
+        "contrast": 1.4182,
+        "k": 0.1825,
+        "smooth_s": 1.3,
+        "maxmissed_s": 1.0
+      },
+      "dev_total": 8.908057634172284,
+      "dev_false": 3.8992026253172747,
+      "dev_missed": 5.008855008855009,
+      "dev_orig_total": 16.29972101309681,
+      "dev_rob_total": 4.288268022344456
+    },
+    "ours_v2": {
+      "label": "Ours-v2 (Layer 1: stationary-candidate state with persist grace, hysteresis, candidate policy, global assignment)",
+      "params": {
+        "window_s": 1.213,
+        "drift": 0.6421,
+        "contrast": 1.2147,
+        "k": 0.5686,
+        "smooth_s": 1.3,
+        "maxmissed_s": 1.0,
+        "persist_s": 0.3971,
+        "hyst_s": 1.899,
+        "cand_policy": 2.0,
+        "assign_mode": 0.0
+      },
+      "dev_total": 0.642950642950643,
+      "dev_false": 0.0,
+      "dev_missed": 0.642950642950643,
+      "dev_orig_total": 1.6716716716716717,
+      "dev_rob_total": 0.0
+    },
+    "bcode": {
+      "label": "B-code, intended behaviour (their firmware rule, static tracks not counted)",
+      "params": {
+        "npersist": 20.0,
+        "drift": 0.9579,
+        "dht_offset": 0.2,
+        "smooth_s": 1.3,
+        "maxmissed_s": 0.5
+      },
+      "dev_total": 25.12864582928277,
+      "dev_false": 7.82672852736547,
+      "dev_missed": 17.3019173019173,
+      "dev_orig_total": 25.101361598176887,
+      "dev_rob_total": 25.145698473723954
+    },
+    "bpaper": {
+      "label": "B-paper (their main.py / paper rule)",
+      "params": {
+        "timebase": "paper",
+        "drift": 1.0077,
+        "dht_offset": 0.1,
+        "smooth_s": 0.0,
+        "maxmissed_s": 0.5
+      },
+      "dev_total": 38.85382898121752,
+      "dev_false": 34.472524599913136,
+      "dev_missed": 4.381304381304381,
+      "dev_orig_total": 24.95716826927018,
+      "dev_rob_total": 47.5392419261846
+    }
+  },
+  "references": {
+    "bcode_asis": {
+      "label": "B-code, as published (static tracks still counted)",
+      "params": {
+        "npersist": 10.0,
+        "drift": 1.2089,
+        "dht_offset": 0.1,
+        "smooth_s": 0.0,
+        "maxmissed_s": 0.5
+      },
+      "dev_total": 87.74492978314636,
+      "dev_false": 87.74492978314636,
+      "dev_missed": 0.0,
+      "dev_orig_total": 79.254686897999,
+      "dev_rob_total": 93.05133158636343
+    }
+  },
+  "untuned_references": {
+    "ours": {
+      "window_s": 6.0,
+      "drift": 0.4,
+      "contrast": 1.0,
+      "k": 0.5,
+      "smooth_s": 1.3,
+      "maxmissed_s": 2.5,
+      "note": "preview-sweep best, tuned on dev earlier"
+    },
+    "ours_v2": {
+      "window_s": 6.0,
+      "drift": 0.4,
+      "contrast": 1.0,
+      "k": 0.5,
+      "smooth_s": 1.3,
+      "maxmissed_s": 2.5,
+      "persist_s": 0.1,
+      "hyst_s": 0.1,
+      "cand_policy": 0,
+      "assign_mode": 0,
+      "note": "nested v1 reference: mode 3 with 1-frame persist/hyst and policy 0 is exactly the Ours-v1 reference (proved by check_v2_nested); not eligible to win"
+    },
+    "bcode": {
+      "npersist": 20,
+      "drift": 0.08,
+      "dht_offset": 0.0,
+      "smooth_s": null,
+      "maxmissed_s": null,
+      "note": "as published, untuned (preset values for smoothing and max_missed)"
+    },
+    "bpaper": {
+      "timebase": "frames",
+      "drift": 0.05,
+      "dht_offset": 0.0,
+      "smooth_s": null,
+      "maxmissed_s": null,
+      "note": "as published, untuned (preset values for smoothing and max_missed)"
+    },
+    "bcode_asis": {
+      "npersist": 20,
+      "drift": 0.08,
+      "dht_offset": 0.0,
+      "smooth_s": null,
+      "maxmissed_s": null,
+      "note": "as published, untuned (preset values for smoothing and max_missed)"
+    }
+  }
+}

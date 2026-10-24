@@ -1,0 +1,6 @@
+papanashi_csvs/
+data/
+*.exe
+__pycache__/
+dry_run/
+tuning_results*/
