@@ -1,0 +1,131 @@
+{
+  "protocol_version": "L1.0",
+  "protocol_json_sha256": "6ce76d198dbed8e25cec108b40bff5aab0f057750227de4253e28812a506f6cf",
+  "tuned_at": "2026-10-24T23:09:26+05:30",
+  "official_run": true,
+  "train_streams": [
+    "Session1_01",
+    "Session1_02",
+    "Session1_03",
+    "Session1_04",
+    "Session1_05",
+    "Session1_06",
+    "Session1_07",
+    "Session1_08",
+    "Session1_09",
+    "Session1_10"
+  ],
+  "candidates": {
+    "ours": {
+      "label": "Ours (extent persistence, robust threshold)",
+      "params": {
+        "window_s": 0.5,
+        "drift": 0.1957,
+        "contrast": 0.8363,
+        "k": 1.175,
+        "smooth_s": 0.0,
+        "maxmissed_s": 0.5
+      },
+      "session1_false": 0.6341789052069425,
+      "session1_missed": 21.99599465954606,
+      "session1_total": 22.630173564753004,
+      "session1_worst_stretch": 38.730158730158735,
+      "winner_stage": 2,
+      "stage1_best_total": 27.50333778371162,
+      "untuned_reference_total": 71.71228304405875,
+      "frozen_v14_total_on_session1": 72.63017356475301,
+      "edge_params": [
+        "window_s"
+      ],
+      "top10_total_range": [
+        22.54672897196262,
+        23.56475300400534
+      ],
+      "trials": 600,
+      "scored_frames": 5992
+    },
+    "ours_v2": {
+      "label": "Ours-v2 (Layer 1: stationary-candidate state with persist grace, hysteresis, candidate policy, global assignment)",
+      "params": {
+        "window_s": 0.5,
+        "drift": 0.3628,
+        "contrast": 0.7516,
+        "k": 0.9099,
+        "smooth_s": 0.0,
+        "maxmissed_s": 0.5,
+        "persist_s": 0.5024,
+        "hyst_s": 1.713,
+        "cand_policy": 4.0,
+        "assign_mode": 1.0
+      },
+      "session1_false": 1.6188251001335114,
+      "session1_missed": 18.374499332443257,
+      "session1_total": 19.99332443257677,
+      "session1_worst_stretch": 36.507936507936506,
+      "winner_stage": 2,
+      "stage1_best_total": 20.493991989319092,
+      "untuned_reference_total": 71.71228304405875,
+      "frozen_v14_total_on_session1": 53.538050734312414,
+      "edge_params": [
+        "window_s"
+      ],
+      "top10_total_range": [
+        19.99332443257677,
+        21.862483311081444
+      ],
+      "trials": 600,
+      "scored_frames": 5992
+    },
+    "bpaper": {
+      "label": "B-paper (their main.py / paper rule)",
+      "params": {
+        "timebase": "frames",
+        "drift": 1.2002,
+        "dht_offset": 1.3,
+        "smooth_s": 0.0,
+        "maxmissed_s": 0.5
+      },
+      "session1_false": 16.071428571428573,
+      "session1_missed": 23.16421895861148,
+      "session1_total": 39.235647530040055,
+      "session1_worst_stretch": 53.96825396825397,
+      "winner_stage": 1,
+      "stage1_best_total": 39.235647530040055,
+      "untuned_reference_total": 47.763684913217624,
+      "frozen_v14_total_on_session1": 60.89786381842457,
+      "edge_params": [],
+      "top10_total_range": [
+        39.235647530040055,
+        39.235647530040055
+      ],
+      "trials": 600,
+      "scored_frames": 5992
+    },
+    "bcode": {
+      "label": "B-code, intended behaviour (their firmware rule, static tracks not counted)",
+      "params": {
+        "npersist": 80.0,
+        "drift": 0.1159,
+        "dht_offset": 1.3,
+        "smooth_s": 0.0,
+        "maxmissed_s": 0.5
+      },
+      "session1_false": 15.971295060080108,
+      "session1_missed": 23.56475300400534,
+      "session1_total": 39.53604806408545,
+      "session1_worst_stretch": 54.285714285714285,
+      "winner_stage": 2,
+      "stage1_best_total": 39.736315086782376,
+      "untuned_reference_total": 59.52937249666221,
+      "frozen_v14_total_on_session1": 54.23898531375166,
+      "edge_params": [],
+      "top10_total_range": [
+        39.48598130841122,
+        39.686248331108146
+      ],
+      "trials": 600,
+      "scored_frames": 5992
+    }
+  },
+  "FROZEN_BEFORE_SESSIONS_2_TO_5_WERE_RE-SCORED": true
+}
