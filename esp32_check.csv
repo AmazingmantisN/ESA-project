@@ -1,0 +1,16 @@
+stream,method,frames,ok,mm_raw,mm_smooth,mm_static,us_mean,us_median,us_p95,us_max
+dev_single_laptop_weak,ours,1113,True,0,0,0,4367.116801437556,4373.0,4631.0,4734
+dev_single_laptop_weak,ours_v2,1113,True,0,0,0,4561.678346810422,4573.0,4775.4,4937
+dev_single_laptop_weak,bcode,1113,True,0,0,0,4681.992812219228,4690.0,4935.0,5121
+dev_single_laptop_weak,bpaper,1113,True,0,0,0,5535.469901168014,5538.0,5989.599999999999,6314
+dev_single_laptop_weak,bcode_asis,1113,True,0,0,0,4778.066486972148,4780.0,5049.2,5247
+dev_empty_heater,ours,1216,True,0,0,0,4924.907072368421,4926.0,4960.0,4990
+dev_empty_heater,ours_v2,1216,True,0,0,0,4970.066611842105,4971.0,5008.0,5037
+dev_empty_heater,bcode,1216,True,0,0,0,4786.4983552631575,4787.5,4822.0,4859
+dev_empty_heater,bpaper,1216,True,0,0,0,5575.2598684210525,5576.5,5636.25,5705
+dev_empty_heater,bcode_asis,1216,True,0,0,0,4811.9588815789475,4813.0,4849.0,4888
+dev_single_clean,ours,1113,True,0,0,0,4354.938005390835,4378.0,4546.4,4664
+dev_single_clean,ours_v2,1113,True,0,0,0,4505.920934411501,4527.0,4664.0,4780
+dev_single_clean,bcode,1113,True,0,0,0,4460.8158131177,4471.0,4681.0,4855
+dev_single_clean,bpaper,1113,True,0,0,0,5127.769991015274,5133.0,5522.0,5842
+dev_single_clean,bcode_asis,1113,True,0,0,0,4529.754716981132,4536.0,4765.599999999999,4956

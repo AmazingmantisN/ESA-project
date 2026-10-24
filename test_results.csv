@@ -1,0 +1,11 @@
+,ours,ours_v2,bcode,bpaper,"bcode_asis (as published, tuned)",ours (untuned reference),ours_v2 (untuned reference),bcode (untuned reference),bpaper (untuned reference)
+test_empty_clean,0.000,0.000,0.580,0.580,0.580,0.000,0.000,8.406,5.700
+test_empty_heater,0.000,0.000,0.580,0.580,100.000,0.000,0.000,8.406,100.000
+test_empty_heater_weak,25.894,0.000,0.966,41.449,100.000,20.097,20.097,38.937,100.000
+test_empty_laptop,0.000,0.000,0.580,0.580,100.000,0.000,0.000,8.406,100.000
+test_empty_laptop_weak,0.000,0.000,0.580,31.884,100.000,0.000,0.000,10.048,100.000
+test_single_clean,4.359,1.370,75.218,36.364,32.379,8.717,8.717,24.408,18.680
+test_single_heater,70.735,23.661,72.976,55.417,100.000,16.687,16.687,33.624,99.253
+test_single_heater_weak,44.085,8.593,71.482,71.980,100.000,35.616,35.616,52.553,100.000
+test_single_laptop,20.050,3.362,75.342,37.484,100.000,8.842,8.842,24.408,100.000
+test_single_laptop_weak,17.061,2.366,74.595,44.458,100.000,6.600,6.600,26.152,100.000

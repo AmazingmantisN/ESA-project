@@ -1,0 +1,311 @@
+{
+  "protocol_version": "1.2",
+  "date": "2026-10-23",
+  "dev_glob": "data/streams/dev_*.csv",
+  "forbidden_in_tuning": [
+    "test_",
+    "expl_"
+  ],
+  "scoring": {
+    "warmup_s": 30,
+    "error": "false% + missed%  (smoothed count > / < true humans), each dev stream weighted equally",
+    "tie_break": [
+      "within 0.10 pt of the best total error: lower worst-single-stream error",
+      "then lower trial index"
+    ],
+    "edge_rule_fraction": 0.05
+  },
+  "budget_trials_per_entry": 300,
+  "rng_seed": 20261019,
+  "shared_choices": {
+    "smooth_s": [
+      0.0,
+      1.3
+    ],
+    "maxmissed_s": [
+      0.5,
+      1.0,
+      2.5
+    ],
+    "dht_offset": [
+      0.0,
+      0.1,
+      0.2
+    ]
+  },
+  "entries": {
+    "ours": {
+      "label": "Ours (extent persistence, robust threshold)",
+      "cli": "ours",
+      "space": {
+        "window_s": {
+          "type": "loguniform",
+          "lo": 1.5,
+          "hi": 12.0
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 1.5
+        },
+        "contrast": {
+          "type": "uniform",
+          "lo": 0.3,
+          "hi": 2.5
+        },
+        "k": {
+          "type": "uniform",
+          "lo": 0.0,
+          "hi": 3.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "window_s": 6.0,
+        "drift": 0.4,
+        "contrast": 1.0,
+        "k": 0.5,
+        "smooth_s": 1.3,
+        "maxmissed_s": 2.5,
+        "note": "preview-sweep best, tuned on dev earlier"
+      }
+    },
+    "bpaper": {
+      "label": "B-paper (their main.py / paper rule)",
+      "cli": "bpaper",
+      "space": {
+        "timebase": {
+          "type": "choice",
+          "values": [
+            "frames",
+            "paper",
+            "loop"
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 0.8
+        },
+        "dht_offset": {
+          "type": "choice",
+          "from": "dht_offset"
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "timebase": "frames",
+        "drift": 0.05,
+        "dht_offset": 0.0,
+        "smooth_s": null,
+        "maxmissed_s": null,
+        "note": "as published, untuned (preset values for smoothing and max_missed)"
+      }
+    },
+    "bcode": {
+      "label": "B-code, intended behaviour (their firmware rule, static tracks not counted)",
+      "cli": "bcode",
+      "space": {
+        "npersist": {
+          "type": "choice",
+          "values": [
+            10,
+            20,
+            40,
+            80
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 0.8
+        },
+        "dht_offset": {
+          "type": "choice",
+          "from": "dht_offset"
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "npersist": 20,
+        "drift": 0.08,
+        "dht_offset": 0.0,
+        "smooth_s": null,
+        "maxmissed_s": null,
+        "note": "as published, untuned (preset values for smoothing and max_missed)"
+      }
+    },
+    "bcode_asis": {
+      "label": "B-code, as published (static tracks still counted)",
+      "cli": "bcode_asis",
+      "space": {
+        "npersist": {
+          "type": "choice",
+          "values": [
+            10,
+            20,
+            40,
+            80
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 0.8
+        },
+        "dht_offset": {
+          "type": "choice",
+          "from": "dht_offset"
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "npersist": 20,
+        "drift": 0.08,
+        "dht_offset": 0.0,
+        "smooth_s": null,
+        "maxmissed_s": null,
+        "note": "as published, untuned (preset values for smoothing and max_missed)"
+      }
+    },
+    "ours_v2": {
+      "label": "Ours-v2 (Layer 1: stationary-candidate state with persist grace, hysteresis, candidate policy, global assignment)",
+      "cli": "ours_v2",
+      "space": {
+        "window_s": {
+          "type": "loguniform",
+          "lo": 1.5,
+          "hi": 12.0
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 1.5
+        },
+        "contrast": {
+          "type": "uniform",
+          "lo": 0.3,
+          "hi": 2.5
+        },
+        "k": {
+          "type": "uniform",
+          "lo": 0.0,
+          "hi": 3.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        },
+        "persist_s": {
+          "type": "loguniform",
+          "lo": 0.25,
+          "hi": 30.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "hyst_s": {
+          "type": "loguniform",
+          "lo": 0.25,
+          "hi": 8.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "cand_policy": {
+          "type": "choice",
+          "values": [
+            0,
+            2,
+            4
+          ]
+        },
+        "assign_mode": {
+          "type": "choice",
+          "values": [
+            0,
+            1
+          ]
+        }
+      },
+      "fixed": {
+        "cand_min_area": 0,
+        "cand_max_peak": 0,
+        "merge_area": 0,
+        "note": "size/warmth gate (policy bit 1) and merge_area are NOT tuned: dev has no multi-person stream, and the injected heat sources have simulator-set size and amplitude, so tuning a size/warmth gate on dev would fit the simulator (Layer 2, deferred to Step 10 real recordings)"
+      },
+      "reference": {
+        "window_s": 6.0,
+        "drift": 0.4,
+        "contrast": 1.0,
+        "k": 0.5,
+        "smooth_s": 1.3,
+        "maxmissed_s": 2.5,
+        "persist_s": 0.1,
+        "hyst_s": 0.1,
+        "cand_policy": 0,
+        "assign_mode": 0,
+        "note": "nested v1 reference: mode 3 with 1-frame persist/hyst and policy 0 is exactly the Ours-v1 reference (proved by check_v2_nested); not eligible to win"
+      }
+    }
+  },
+  "supersedes": {
+    "version": "1.1",
+    "json_sha256_prefix": "239ef348cfb68181",
+    "reason": "v1.1 left the Ours-v2 slot disabled until it was built (Step 5c, now built and verified). v1.2 enables it with the space above and records the k-edge erratum. Ours-v1, B-paper, B-code spaces, seeds, budget and selection rule are unchanged, so their stage-1/2 samples and results must reproduce v1.1 exactly. Made after seeing v1.1 DEV results; test_* never touched.",
+    "earlier": {
+      "version": "1.0",
+      "json_sha256_prefix": "6eede3d68865115c"
+    }
+  },
+  "stage2": {
+    "top_k": 5,
+    "perturbations_per_seed": 60,
+    "continuous_log_sigma": 0.2,
+    "continuous_lin_sigma_frac": 0.08,
+    "discrete_resample_prob": 0.3,
+    "rng_seed_offset": 1,
+    "note": "total 300 + 5x60 = 600 evaluated trials per entry; stage 1 is identical to v1.0 (same seed and sampler)"
+  },
+  "errata": {
+    "k_natural_bound": "v1.1 edge rule flagged k at 0.07 on a 0-3 range. k=0 means the k term is off, so 0 is a natural bound, not an arbitrary cutoff. From v1.2 an edge at a natural bound (marked natural_bounds) is reported as 'natural bound' and does NOT trigger widening. Applies to k (Ours-v1, Ours-v2), persist_s and hyst_s lower ends (~1 frame is the minimum meaningful value). Non-natural edges still trigger widening in a new version."
+  }
+}
