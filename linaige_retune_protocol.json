@@ -1,0 +1,303 @@
+{
+  "protocol_version": "L1.0",
+  "date": "2026-10-24",
+  "kind": "declared follow-up to the frozen LINAIGE transfer run (linaige_protocol.md + amendment 1); based on tuning protocol v1.4",
+  "streams_dir": "linaige_streams",
+  "train_glob": "linaige_streams/Session1_*.csv",
+  "train_sessions": [
+    "Session1"
+  ],
+  "test_sessions": [
+    "Session2",
+    "Session3",
+    "Session4",
+    "Session5"
+  ],
+  "forbidden_in_tuning": [
+    "Session2_",
+    "Session3_",
+    "Session4_",
+    "Session5_",
+    "test_",
+    "expl_"
+  ],
+  "scoring": {
+    "warmup_s": 30,
+    "hard_frames": "frames with confidence 'h' stay in the stream but are not scored (amendment 1, rule 4)",
+    "error": "false% + missed% of the smoothed count vs people_number, POOLED over all scored frames of all Session1 stretches (frame-weighted, the same weighting as the test table)",
+    "tie_break": [
+      "within 0.10 pt of the best total error: lower worst-single-stretch error (stretches with at least 300 scored frames only)",
+      "then lower trial index"
+    ],
+    "worst_min_scored_frames": 300,
+    "edge_rule_fraction": 0.05
+  },
+  "budget_trials_per_entry": 300,
+  "rng_seed": 20261024,
+  "shared_choices": {
+    "smooth_s": [
+      0.0,
+      1.3
+    ],
+    "maxmissed_s": [
+      0.5,
+      1.0,
+      2.5
+    ],
+    "dht_offset": [
+      -0.9,
+      -0.6,
+      -0.3,
+      0.0,
+      0.1,
+      0.2,
+      0.5,
+      1.0,
+      1.3
+    ]
+  },
+  "changes_vs_v1.4": {
+    "dht_offset": "v1.4 allowed 0.0, 0.1, 0.2. In LINAIGE the baselines get dht = frame median + 1.2 C, so their threshold is median + 1.2 + offset, i.e. 1.2 to 1.4 C above the median, while Ours can reach median + 0.3 ... 2.5 C through 'contrast'. The widened set (-0.9 ... +1.3) lets the baselines reach the same thresholds (median + 0.3 ... 2.5). Without this the baselines would be handicapped by the search space, not by the method.",
+    "rng_seed": "20261024 (new, so stage-1 samples are fresh)",
+    "entries": "bcode_asis (as-published reference) is not re-tuned; it was never part of the LINAIGE run",
+    "everything_else": "search spaces, budget (300 + 5x60 = 600 trials per entry), sampler, stage 2, edge rule and tie-break are those of v1.4"
+  },
+  "entries": {
+    "ours": {
+      "label": "Ours (extent persistence, robust threshold)",
+      "cli": "ours",
+      "space": {
+        "window_s": {
+          "type": "loguniform",
+          "lo": 0.5,
+          "hi": 12.0,
+          "operational_bounds": [
+            "hi"
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 1.5
+        },
+        "contrast": {
+          "type": "uniform",
+          "lo": 0.3,
+          "hi": 2.5
+        },
+        "k": {
+          "type": "uniform",
+          "lo": 0.0,
+          "hi": 3.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "window_s": 6.0,
+        "drift": 0.4,
+        "contrast": 1.0,
+        "k": 0.5,
+        "smooth_s": 1.3,
+        "maxmissed_s": 2.5,
+        "note": "preview-sweep best, tuned on dev earlier"
+      }
+    },
+    "ours_v2": {
+      "label": "Ours-v2 (Layer 1: stationary-candidate state with persist grace, hysteresis, candidate policy, global assignment)",
+      "cli": "ours_v2",
+      "space": {
+        "window_s": {
+          "type": "loguniform",
+          "lo": 0.5,
+          "hi": 12.0,
+          "operational_bounds": [
+            "hi"
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 1.5
+        },
+        "contrast": {
+          "type": "uniform",
+          "lo": 0.3,
+          "hi": 2.5
+        },
+        "k": {
+          "type": "uniform",
+          "lo": 0.0,
+          "hi": 3.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        },
+        "persist_s": {
+          "type": "loguniform",
+          "lo": 0.25,
+          "hi": 90.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "hyst_s": {
+          "type": "loguniform",
+          "lo": 0.25,
+          "hi": 8.0,
+          "natural_bounds": [
+            "lo"
+          ]
+        },
+        "cand_policy": {
+          "type": "choice",
+          "values": [
+            0,
+            2,
+            4
+          ]
+        },
+        "assign_mode": {
+          "type": "choice",
+          "values": [
+            0,
+            1
+          ]
+        }
+      },
+      "fixed": {
+        "cand_min_area": 0,
+        "cand_max_peak": 0,
+        "merge_area": 0,
+        "note": "size/warmth gate (policy bit 1) and merge_area are NOT tuned: dev has no multi-person stream, and the injected heat sources have simulator-set size and amplitude, so tuning a size/warmth gate on dev would fit the simulator (Layer 2, deferred to Step 10 real recordings)"
+      },
+      "reference": {
+        "window_s": 6.0,
+        "drift": 0.4,
+        "contrast": 1.0,
+        "k": 0.5,
+        "smooth_s": 1.3,
+        "maxmissed_s": 2.5,
+        "persist_s": 0.1,
+        "hyst_s": 0.1,
+        "cand_policy": 0,
+        "assign_mode": 0,
+        "note": "nested v1 reference: mode 3 with 1-frame persist/hyst and policy 0 is exactly the Ours-v1 reference (proved by check_v2_nested); not eligible to win"
+      }
+    },
+    "bpaper": {
+      "label": "B-paper (their main.py / paper rule)",
+      "cli": "bpaper",
+      "space": {
+        "timebase": {
+          "type": "choice",
+          "values": [
+            "frames",
+            "paper",
+            "loop"
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 2.0
+        },
+        "dht_offset": {
+          "type": "choice",
+          "from": "dht_offset"
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "timebase": "frames",
+        "drift": 0.05,
+        "dht_offset": 0.0,
+        "smooth_s": null,
+        "maxmissed_s": null,
+        "note": "as published, untuned (preset values for smoothing and max_missed)"
+      }
+    },
+    "bcode": {
+      "label": "B-code, intended behaviour (their firmware rule, static tracks not counted)",
+      "cli": "bcode",
+      "space": {
+        "npersist": {
+          "type": "choice",
+          "values": [
+            10,
+            20,
+            40,
+            80
+          ]
+        },
+        "drift": {
+          "type": "loguniform",
+          "lo": 0.05,
+          "hi": 2.0
+        },
+        "dht_offset": {
+          "type": "choice",
+          "from": "dht_offset"
+        },
+        "smooth_s": {
+          "type": "choice",
+          "from": "smooth_s"
+        },
+        "maxmissed_s": {
+          "type": "choice",
+          "from": "maxmissed_s"
+        }
+      },
+      "reference": {
+        "npersist": 20,
+        "drift": 0.08,
+        "dht_offset": 0.0,
+        "smooth_s": null,
+        "maxmissed_s": null,
+        "note": "as published, untuned (preset values for smoothing and max_missed)"
+      }
+    }
+  },
+  "stage2": {
+    "top_k": 5,
+    "perturbations_per_seed": 60,
+    "continuous_log_sigma": 0.2,
+    "continuous_lin_sigma_frac": 0.08,
+    "discrete_resample_prob": 0.3,
+    "rng_seed_offset": 1,
+    "note": "total 300 + 5x60 = 600 evaluated trials per entry; stage 1 is identical to v1.0 (same seed and sampler)"
+  },
+  "operational_limits": {
+    "window_s_max": 12.0,
+    "note": "Ours-v1 and Ours-v2 window_s <= 12 s (about 45 frames at 3.8 fps; firmware MAX_WINDOW is 64). A new track is not counted until its window fills, so window_s is the detection delay; dev scoring does not measure delay, so the limit is declared here instead of letting the search run into it. Declared after seeing that the v1.3 winner sat at exactly 12 s."
+  },
+  "stop_rule": "This is the only re-tune on LINAIGE. A winner on a non-natural, non-operational range end is reported as 'edge-limited'; it does NOT trigger a second round. Nothing is changed after the Sessions 2-5 test has been run.",
+  "results_dir": "tuning_results_linaige",
+  "frozen_params_output": "params_linaige_session1.json",
+  "test_lock": "linaige_retune_test.lock",
+  "test_results": "linaige_retune_results.md"
+}
